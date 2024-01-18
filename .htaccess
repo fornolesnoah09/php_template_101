@@ -1,0 +1,31 @@
+RewriteEngine On
+RewriteBase /php_router/
+RewriteRule ^index\.php$ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# above code explanation:
+# line 1: We activate the Apache server’s runtime rewriting engine.
+# line 2: Folder of codebase
+#           RewriteBase /myproject/       # This is for localhost where your code is inside htdocs/project
+#           RewriteBase /                 # This is for hosting, where your code is inside public_html directory or root directory  
+
+# line 3: This rule checks if the requested URL is exactly "index.php" (anchored at the start and end of the string). 
+#         If it is, the rewriting process is skipped (-) with the [L] flag, indicating that this is the last rule to be processed.
+# line 4: This condition checks if the requested filename is not an existing file (!-f). 
+#         If the condition is true (i.e., the file doesn't exist), the following rule will be applied.
+# line 5: This condition checks if the requested filename is not an existing directory (!-d). 
+#         If the condition is true (i.e., the directory doesn't exist), the following rule will be applied.
+# line 6: This rule captures any requested URL and rewrites it to index.php?url= followed by the captured part of the original URL. 
+#         The [QSA] flag appends existing query parameters, and the [L] flag indicates that this is the last rule to be processed. 
+
+# NOTES: 
+#       Define a constant variable BASE_URL for code efficiency
+#       1. In development
+#           define('BASE_URL', 'http://'.$_SERVER['SERVER_ADDR'].'/myproject/'); OR 
+#           define('BASE_URL', 'http://localhost/myproject/'); 
+#       2. In hosting
+#           define('BASE_URL', 'http://'.$_SERVER['SERVER_ADDR'].'/myproject/'); OR 
+#           define('BASE_URL', 'http://localhost/myproject/'); 
